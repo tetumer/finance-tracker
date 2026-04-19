@@ -1,9 +1,39 @@
 <!DOCTYPE html>
-<html>
-<head>
-<title>summery </title>
-</head>
-<body>
-<p>summery goes here </p> 
+	<html>
+		<head>
+			<title>summery </title>
+			<meta name="viewport" content = "width = device-width, initial-scale=1.0">
+   			<link rel="stylesheet" href="style.css">
+ 		</head>
+		<body>
+       			 <div id="nav">
+ 				  <nav class = "nav-container">
+ 					 <a href="home.html" class= "navbutton">Home</a>
+    					 <a href="history.html" class= "navbutton">History</a>
+    					 <a href="comment.html" class= "navbutton">Comment</a>
+   					 <a href="goal.html" class= "navbutton">Goal</a>
+   					 <a href="alert.html" class= "navbutton">Alert</a>
+   					 <a href="summery.html" class= "navbutton">Summery</a>
+				 </nav>
+      			</div>
+			<div class="summary-meter">
+  				<svg width="400" height="200">
+ 				 <!-- Axes -->
+  				<line x1="40" y1="180" x2="380" y2="180" stroke="black"/>
+  				<line x1="40" y1="180" x2="40" y2="20" stroke="black"/>
+  
+ 				 <!-- Ogive line (placeholder points) -->
+  					<polyline 
+    				points="40,180 100,150 160,120 220,90 280,60 340,40" 
+   				 fill="none" 
+  				  stroke="blue" 
+   				 stroke-width="2"/>
+				</svg>
+
+			</div>
+			<div>
+				<p> you earn this much and then blow up this much now you have this much. you where this close to reaching your goal and u didnt make it. you deffinetly need to spend less money in this shit. thats all</p>
+			</div>
+
 </body>
 </html>

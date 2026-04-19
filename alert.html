@@ -1,14 +1,27 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title> Dashboard</title>
-  </head>
-  <body>
-    <nav>
-      navigation bar goes here
-    </nav>
-    <button>+</button>
-   <p> add alert/goal</p>
+	<html>
+  		<head>
+    			<title> Dashboard</title>
+			<meta name="viewport" content = "width = device-width, initial-scale=1.0">
+   			<link rel="stylesheet" href="style.css">
+ 		</head>
+		<body>
+       			 <div id="nav">
+ 				  <nav class = "nav-container">
+ 					 <a href="home.html" class= "navbutton">Home</a>
+    					 <a href="history.html" class= "navbutton">History</a>
+    					 <a href="comment.html" class= "navbutton">Comment</a>
+   					 <a href="goal.html" class= "navbutton">Goal</a>
+   					 <a href="alert.html" class= "navbutton">Alert</a>
+   					 <a href="summery.html" class= "navbutton">Summery</a>
+				 </nav>
+      			</div>
+
+		<p> Alert </p> 
+		<p> You have spent that much money  </p>
+			<div class="meter" id="alert meter">
+  				<div class="progress" id = "alert-progress"></div>
+			</div>
   </body>
 </html>
 
