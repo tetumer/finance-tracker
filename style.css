@@ -14,32 +14,60 @@ body {
   margin: 0;
   padding: 0;
 }
-
-
 .nav-container {
-  display: flex;
-  justify-content: center; 
-  gap: 10px;
-}
+      border: 1px solid black;  
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+     
+    }
+
+    .logo {
+      flex: 0 0 auto; /* logo stays fixed */
+    }
+
+    .logo img {
+      height: 100px;   /* bigger logo */
+      width: auto;
+    }
+
+    .nav-buttons {
+      flex: 1;                
+      display: flex;
+      justify-content: flex-end; 
+      gap: 10px; /* spacing between buttons */
+    }
+
+    .navbutton {
+      flex: 1;                /* allow stretching */
+      max-width: 150px;       /* cap the width */
+      text-align: center;
+      font-size: 14pt;           
+      color: black;
+      background-color: white;
+      border: 2px solid black;
+      padding: 10px;       
+      cursor: pointer;
+      transition: transform 0.3s ease, background 0.3s ease;
+      border-radius: 25px;      
+      text-decoration: none;    
+    }
+
+    .navbutton:hover {
+      transform: scale(1.1);
+      background-color: #00f260;
+    }
+
+    .navbutton:active {
+      transform: scale(0.95);
+      background-color: #0575e6;
+    }
 
 .dashboard {
   display: flex;
   justify-content: center;  /* buttons side by side */
   gap: 20px;
 }
-
-.navbutton {
-  font-size: 14pt;           
-  color: black;
-  background-color: white;
-  border: 2px solid black;
-  padding: 10px 20px;       
-  cursor: pointer;
-  transition: transform 0.3s ease, background 0.3s ease;
-  border-radius: 25px;      
-  text-decoration: none;    
-}
-
 
 .dbutton {
  font-size: 14pt;           
@@ -53,14 +81,6 @@ body {
   text-decoration: none; 
 }
 
-.navbutton:hover {
-  transform: scale(1.2);
-  background-color: #00f260;
-}
-.navbutton:active {
-  transform: scale(0.9);
-  background-color: #0575e6;
-}
 .dbutton:hover{
   transform: scale(1.2);
   background-color: #00f260;
