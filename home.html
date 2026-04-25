@@ -4,16 +4,26 @@
 		<title> Home </title>
 		<meta name="viewport" content = "width = device-width, initial-scale=1.0">
  		<link rel="stylesheet" href="style.css">
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 	</head>
 
 	<body>
 		<div id="navbar"></div>
+		<div class="notification">
+  			<span class="bell">🔔</span>
+  			<span class="badge">3</span>
+		</div>
 
 		  <div class="dashboard">
-			
   			  <button class="dbutton">Income</button>
   			  <button class="dbutton">Expense</button>
   		  </div>
+		  <div class="piechart">
+  				<canvas id="PieChart"></canvas>
+		  </div>
+
+
 	<script>
 	  fetch("nav.html")
 	    .then(response => response.text())
@@ -21,5 +31,34 @@
 	      document.getElementById("navbar").innerHTML = data;
 	    });
 	</script>
-
+	<script>
+		const ctx = document.getElementById('PieChart').getContext('2d');
+		const PieChart = new Chart(ctx, {
+			type: 'pie',
+			data: {
+			labels: ['Income', 'Expense'],
+			datasets: [{
+				data: [1, 1],  // Example values
+				backgroundColor: [
+				'#00f260',  // green
+				'#ff4d4d',  // red
+				],
+				borderColor: '#fff',
+				borderWidth: 2
+			}]
+			},
+			options: {
+			responsive: true,
+			plugins: {
+				legend: {
+				position: 'top'
+				},
+				title: {
+				display: true,
+				text: 'Finance Overview'
+				}
+			}
+			}
+		});
+	</script>
 	</body>

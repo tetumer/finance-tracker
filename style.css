@@ -147,5 +147,31 @@ body {
   background: linear-gradient(to right, #00f260, #0575e6);
   transition: width 0.5s ease;
 }
+.notification {
+  position: fixed;
+  top:20px;
+  right:20px;
+  cursor: pointer;
+}
+
+.bell {
+  font-size: 28px;   /* size of the bell */
+}
+
+.badge {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  padding: 4px 7px;
+  font-size: 12px;
+  font-weight: bold;
+}
+.piechart {
+  width: 400px;
+  margin: 30px auto;
+}
 
 
