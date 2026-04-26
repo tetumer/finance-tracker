@@ -5,14 +5,14 @@
 		<meta name="viewport" content = "width = device-width, initial-scale=1.0">
  		<link rel="stylesheet" href="style.css">
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+		<script src="scrip.js"></script>
 	</head>
 
 	<body>
 		<div id="navbar"></div>
 		<div class="notification">
   			<span class="bell">🔔</span>
-  			<span class="badge">3</span>
+  			<span class="badge">4</span>
 		</div>
 
 		  <div class="dashboard">
@@ -24,13 +24,7 @@
 		  </div>
 
 
-	<script>
-	  fetch("nav.html")
-	    .then(response => response.text())
-	    .then(data => {
-	      document.getElementById("navbar").innerHTML = data;
-	    });
-	</script>
+	
 	<script>
 		const ctx = document.getElementById('PieChart').getContext('2d');
 		const PieChart = new Chart(ctx, {
