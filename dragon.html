@@ -6,7 +6,7 @@
       body {
         font-family: Arial, sans-serif;
         display: flex;
-        justify-content: center;
+        flex-direction: column;
         align-items: center;
         height: 100vh;
         margin: 0;
@@ -20,6 +20,7 @@
         box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         text-align: center;
         width: 400px;
+        margin-top: 40px;
       }
 
       .form-row {
@@ -59,14 +60,54 @@
         border-radius: 5px;
         cursor: pointer;
         font-size: 16px;
+        margin: 5px;
       }
 
       button:hover {
         background-color: #45a049;
       }
+
+      /* Animation scene */
+      .scene {
+        width: 600px;
+        height: 400px;
+        position: relative;
+        background: #fff;
+        margin: 20px;
+        overflow: hidden;
+      }
+      .scene img { position: absolute; }
+
+      #dragon {
+        right: 20px;
+        top: 50px;
+        width: 250px;
+        z-index: 2;
+      }
+      #bag {
+        left: 200px;   /* start closer */
+        top: 100px;    /* higher */
+        width: 60px;   /* smaller */
+        z-index: 1;
+        display: none;
+      }
+      #pile {
+        right: 50px;
+        bottom: 0;
+        width: 200px;
+        z-index: 1;
+      }
+      #hand {
+        left: 0;       /* comes from left */
+        bottom: 50px;
+        width: 70px;   /* smaller hand */
+        z-index: 3;
+        display: none;
+      }
     </style>
   </head>
   <body>
+    <!-- Form -->
     <form>
       <div class="radio-group">
         <input type="radio" id="income" name="type" value="income">
@@ -99,9 +140,62 @@
       </div>
 
       <button type="submit">Submit</button>
+      <button type="button" onclick="window.location.href='index.html'">Home</button>
+      <button type="button" onclick="window.location.href='history.html'">History</button>
     </form>
+
+    <!-- Animation scene -->
+    <div class="scene">
+      <img id="dragon" src="one.jpeg" alt="Dragon">
+      <img id="bag" src="bagofgold.png" alt="Bag of Gold">
+      <img id="pile" src="pileofgold.jpg" alt="Pile of Gold">
+      <img id="hand" src="cartoonhand.png" alt="Hand">
+    </div>
+
 <script>
   const form = document.querySelector("form");
+  const dragon = document.getElementById("dragon");
+  const bag = document.getElementById("bag");
+  const hand = document.getElementById("hand");
+
+  // Dragon flapping: 5 times per second
+  const dragonFrames = ["one.jpeg", "two.jpeg"];
+  let dragonIndex = 0;
+  setInterval(() => {
+    dragonIndex = (dragonIndex + 1) % dragonFrames.length;
+    dragon.src = dragonFrames[dragonIndex];
+  }, 200); // 200ms per frame = 5Hz
+
+  // Bag loop (income)
+  function loopBag() {
+    bag.style.display = "block";
+    let pos = 200; // start closer
+    const move = setInterval(() => {
+      pos += 2; // slower
+      bag.style.left = pos + "px";
+      if (pos >= 380) { // vanish right when touching dragon
+        clearInterval(move);
+        bag.style.display = "none";
+        setTimeout(loopBag, 2000);
+      }
+    }, 33);
+  }
+
+  // Hand loop (expense)
+function loopHand() {
+  hand.style.display = "block";
+  let pos = 1000; // start from left edge
+  const move = setInterval(() => {
+    pos += 2; // slower
+    hand.style.left = pos + "px";
+    if (pos >= 330) { // stop exactly at pile
+      clearInterval(move);
+      hand.style.display = "none";
+      setTimeout(loopHand, 2000);
+    }
+  }, 33);
+}
+
   form.addEventListener("submit", function(event) {
     event.preventDefault(); 
 
@@ -113,26 +207,24 @@
 
     if (!type || sector === "" || amount === "" || date === "" || time === "") {
       alert("Please fill out all fields before submitting.");
-      return; // stop here, don’t save anything
+      return;
     }
-    const entry = { 
-      type: type.value, 
-      sector, 
-      amount, 
-      date, 
-      time 
-    };
 
+    const entry = { type: type.value, sector, amount, date, time };
     let entries = JSON.parse(localStorage.getItem("entries")) || [];
     entries.push(entry);
     localStorage.setItem("entries", JSON.stringify(entries));
 
     alert("Entry saved!");
     form.reset();
-    window.location.href = "history.html"; 
+
+    // Trigger animation loop based on type
+    if (type.value === "income") {
+      loopBag();
+    } else {
+      loopHand();
+    }
   });
 </script>
-
-
   </body>
 </html>
