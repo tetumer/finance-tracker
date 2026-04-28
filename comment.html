@@ -1,42 +1,108 @@
 <!DOCTYPE html>
-   <html>
-	<head>
-			<title>Comment </title>
-			<meta name="viewport" content = "width = device-width, initial-scale=1.0">
- 			<link rel="stylesheet" href="style.css">
-			<script src="scrip.js"></script>
-	</head>
-	<body>
-		<div id="navbar"></div>
-		<div class="notification">
-  			<span class="bell">🔔</span>
-  			<span class="badge">4</span>
-		</div>
-	<div>
-			<button type= "button" id = "cincome" class= "dbutton">Income</button>
-			<button type= "button" id = "cexpense" class= "dbutton">Expense</button>
-			<br><br>
-			<button type= "button" id = "bestsource">any shit</button>
-			<button type= "button" id = "2ndbestsource">2nd shit</button>
-			<button type= "button" id = "3rdbestsource">3rd shit</button>
-			<br><br>
-			<button type= "button" id = "mostexpense">any shit</button>
-			<button type= "button" id = "2ndmostexpense">2nd shit</button>
-			<button type= "button" id = "3rdmostexpense">3rd shit</button>
+<html>
+  <head>
+    <title>Comment</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="scrip.js"></script>
+  </head>
+  <body>
+    <div id="navbar"></div>
+    <div class="notification">
+      <span class="bell">🔔</span>
+      <span class="badge">4</span>
+    </div>
 
-<p>some shit isnt worth anything</p>
-<p>top notch comment</p>
-<p> ohohohohohohohoh </p>
-<script>
-	  fetch("nav.html")
-	    .then(response => response.text())
-	    .then(data => {
-	      document.getElementById("navbar").innerHTML = data;
-	    });
-	</script>
+    <div>
+      <button type="button" id="cincome" class="dbutton">Income</button>
+      <button type="button" id="cexpense" class="dbutton">Expense</button>
+      <br><br>
+      <div class="top3-container income-group">
+        <button id="bestsource" class="top3-button income-btn">Top Income</button>
+        <div class="top3-row">
+          <button id="2ndbestsource" class="top3-button income-btn">2nd Income</button>
+          <button id="3rdbestsource" class="top3-button income-btn">3rd Income</button>
+        </div>
+      </div>
+      <div class="top3-container expense-group">
+        <button id="mostexpense" class="top3-button expense-btn">Top Expense</button>
+        <div class="top3-row">
+          <button id="2ndmostexpense" class="top3-button expense-btn">2nd Expense</button>
+          <button id="3rdmostexpense" class="top3-button expense-btn">3rd Expense</button>
+        </div>
+      </div>
+      <div id="comments">
+        <p>Click a button to see insights...</p>
+      </div>
+    </div>
 
+    <script>
+      fetch("nav.html")
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById("navbar").innerHTML = data;
+        });
+      const entries = JSON.parse(localStorage.getItem("entries")) || [];
 
-</body>
-	
+      function getTopSources(type) {
+        const filtered = entries.filter(e => e.type === type);
+        filtered.sort((a, b) => Number(b.amount) - Number(a.amount));
+        return filtered.slice(0, 3);
+      }
+      function showTopSources(type) {
+        const top = getTopSources(type);
 
+        if (type === "income") {
+          document.getElementById("bestsource").textContent = top[0]?.sector || "N/A";
+          document.getElementById("2ndbestsource").textContent = top[1]?.sector || "N/A";
+          document.getElementById("3rdbestsource").textContent = top[2]?.sector || "N/A";
+        } else {
+          document.getElementById("mostexpense").textContent = top[0]?.sector || "N/A";
+          document.getElementById("2ndmostexpense").textContent = top[1]?.sector || "N/A";
+          document.getElementById("3rdmostexpense").textContent = top[2]?.sector || "N/A";
+        }
+      }
+      function showComments() {
+        const totalIncome = entries
+          .filter(e => e.type === "income")
+          .reduce((sum, e) => sum + Number(e.amount), 0);
+
+        const totalExpense = entries
+          .filter(e => e.type === "expense")
+          .reduce((sum, e) => sum + Number(e.amount), 0);
+
+        const commentBox = document.getElementById("comments");
+
+        if (totalIncome > totalExpense) {
+          commentBox.innerHTML = `
+            <p>✅ Great job! Your income is higher than your expenses.</p>
+            <p>Consider saving or investing the surplus.</p>
+          `;
+        } else if (totalExpense > totalIncome) {
+          commentBox.innerHTML = `
+            <p>⚠️ Careful! Your expenses are higher than your income.</p>
+            <p>Try cutting unnecessary costs or boosting income sources.</p>
+          `;
+        } else {
+          commentBox.innerHTML = `
+            <p>⚖️ Balanced! Income and expenses are equal.</p>
+            <p>Keep monitoring to maintain stability.</p>
+          `;
+        }
+      }
+      document.getElementById("cincome").addEventListener("click", () => {
+        document.querySelector(".income-group").style.display = "flex";
+        document.querySelector(".expense-group").style.display = "none";
+        showTopSources("income");
+        showComments();
+      });
+
+      document.getElementById("cexpense").addEventListener("click", () => {
+        document.querySelector(".expense-group").style.display = "flex";
+        document.querySelector(".income-group").style.display = "none";
+        showTopSources("expense");
+        showComments();
+      });
+    </script>
+  </body>
 </html>

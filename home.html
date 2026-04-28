@@ -22,37 +22,71 @@
 		  <div class="piechart">
   				<canvas id="PieChart"></canvas>
 		  </div>
+		  <button id="clearDataBtn" class="dbutton">🗑️ Delete All Data</button>
+				<script>
+				document.getElementById("clearDataBtn").addEventListener("click", () => {
+					if (confirm("Are you sure you want to delete all saved data?")) {
+					// Clear only the keys you’ve been using
+					localStorage.removeItem("entries");
+					localStorage.removeItem("alerts");
 
+					// Or clear absolutely everything:
+					// localStorage.clear();
 
-	
-	<script>
-		const ctx = document.getElementById('PieChart').getContext('2d');
-		const PieChart = new Chart(ctx, {
-			type: 'pie',
-			data: {
-			labels: ['Income', 'Expense'],
-			datasets: [{
-				data: [1, 1],  // Example values
-				backgroundColor: [
-				'#00f260',  // green
-				'#ff4d4d',  // red
-				],
-				borderColor: '#fff',
-				borderWidth: 2
-			}]
-			},
-			options: {
-			responsive: true,
-			plugins: {
-				legend: {
-				position: 'top'
+					alert("All data has been deleted.");
+					location.reload(); // refresh to show empty state
+					}
+				});
+				</script>
+
+			<script>
+			const entries = JSON.parse(localStorage.getItem("entries")) || [];
+			const ctx = document.getElementById('PieChart').getContext('2d');
+			const PieChart = new Chart(ctx, {
+				type: 'pie',
+				data: {
+				labels: [],
+				datasets: [{
+					data: [],
+					backgroundColor: [],
+					borderColor: '#fff',
+					borderWidth: 2
+				}]
 				},
-				title: {
-				display: true,
-				text: 'Finance Overview'
+				options: {
+				responsive: true,
+				plugins: {
+					legend: { position: 'top' },
+					title: { display: true, text: 'Finance Overview' }
+				}
+				}
+			});
+			function generateColors(type, count) {
+				if (type === "income") {
+				// Different greens
+				const greens = ['#00f260', '#00c853', '#66bb6a', '#43a047', '#1b5e20'];
+				return Array.from({length: count}, (_, i) => greens[i % greens.length]);
+				} else {
+				// Different reds
+				const reds = ['#ff4d4d', '#e53935', '#f44336', '#c62828', '#b71c1c'];
+				return Array.from({length: count}, (_, i) => reds[i % reds.length]);
 				}
 			}
+			function updateChart(type) {
+				const filtered = entries.filter(e => e.type === type);
+				const labels = filtered.map(e => e.sector);
+				const values = filtered.map(e => Number(e.amount));
+				const colors = generateColors(type, labels.length);
+				PieChart.data.labels = labels;
+				PieChart.data.datasets[0].data = values;
+				PieChart.data.datasets[0].backgroundColor = colors;
+				PieChart.options.plugins.title.text = type === "income" ? "Income by Sector" : "Expense by Sector";
+				PieChart.update();
 			}
-		});
-	</script>
+			const buttons = document.querySelectorAll(".dbutton");
+			buttons[0].addEventListener("click", () => updateChart("income"));
+			buttons[1].addEventListener("click", () => updateChart("expense"));
+			</script>
+
+
 	</body>

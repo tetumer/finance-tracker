@@ -13,38 +13,43 @@
   			<span class="badge">4</span>
 		</div>
 	<div>
-		<table border = "solid" id ="table">
-			<thead>
-				<tr>
-					<th> Income/Expense</th>
-					<th> Source </th>
-					<th> Amount </th>
-					<th> Date </th>
-					<th> Time </th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>
-					    Income
-					</td>
-					<td>
-					    Shop
-					</td>
-					<td>
-					    10
-					</td>
-					<td>
-					    3/4/2026
-					</td>
-					<td>
-					    12:23
-					</td>
-				</tr>
-			</tbody>
-		</table>
-    	</div>
+      <table border="solid" id="table">
+        <thead>
+          <tr>
+            <th>Income/Expense</th>
+            <th>Source</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+         
+        </tbody>
+      </table>
+    </div>
+
+    <script>
+      const entries = JSON.parse(localStorage.getItem("entries")) || [];
+
+      // Find the table body
+      const tbody = document.querySelector("#table tbody");
+
+      // Clear any static rows
+      tbody.innerHTML = "";
+
+      // Loop through entries and add rows
+      entries.forEach(entry => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${entry.type}</td>
+          <td>${entry.sector}</td>
+          <td>${entry.amount}</td>
+          <td>${entry.date}</td>
+          <td>${entry.time}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    </script>
   </body>
 </html>
-
-

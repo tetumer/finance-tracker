@@ -1,36 +1,69 @@
 <!DOCTYPE html>
-	<html>
-		<head>
-			<title>summery </title>
-			<meta name="viewport" content = "width = device-width, initial-scale=1.0">
-   			<link rel="stylesheet" href="style.css">
-			<script src="scrip.js"></script>
- 		</head>
-		<body>
-		<div id="navbar"></div>
-		<div class="notification">
-  			<span class="bell">🔔</span>
-  			<span class="badge">4</span>
-		</div>
+<html>
+  <head>
+    <title>Summary</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="scrip.js"></script>
+  </head>
+  <body>
+    <div id="navbar"></div>
+    <div class="notification">
+      <span class="bell">🔔</span>
+      <span class="badge">4</span>
+    </div>
 
-			<div class="summary-meter">
-  				<svg width="400" height="200">
- 				 <!-- Axes -->
-  				<line x1="40" y1="180" x2="380" y2="180" stroke="black"/>
-  				<line x1="40" y1="180" x2="40" y2="20" stroke="black"/>
-  
- 				 <!-- Ogive line (placeholder points) -->
-  					<polyline 
-    				points="40,180 100,150 160,120 220,90 280,60 340,40" 
-   				 fill="none" 
-  				  stroke="blue" 
-   				 stroke-width="2"/>
-				</svg>
+    <div class="summary-meter">
+      <svg id="summaryChart" width="400" height="200">
+        <!-- Axes -->
+        <line x1="40" y1="180" x2="380" y2="180" stroke="black"/>
+        <line x1="40" y1="180" x2="40" y2="20" stroke="black"/>
+        <!-- Ogive line will be drawn dynamically -->
+        <polyline id="ogiveLine" fill="none" stroke="blue" stroke-width="2"/>
+      </svg>
+    </div>
 
-			</div>
-			<div>
-				<p> you earn this much and then blow up this much now you have this much. you where this close to reaching your goal and u didnt make it. you deffinetly need to spend less money in this shit. thats all</p>
-			</div>
+    <div>
+      <p id="summaryText"></p>
+    </div>
 
-</body>
+    <script>
+      // Load navbar
+      fetch("nav.html")
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById("navbar").innerHTML = data;
+        });
+
+      // Get entries
+      const entries = JSON.parse(localStorage.getItem("entries")) || [];
+
+      // Calculate totals
+      const totalIncome = entries.filter(e => e.type === "income")
+        .reduce((sum, e) => sum + Number(e.amount), 0);
+      const totalExpense = entries.filter(e => e.type === "expense")
+        .reduce((sum, e) => sum + Number(e.amount), 0);
+      const balance = totalIncome - totalExpense;
+
+      // Build ogive points (simple cumulative line)
+      let cumulative = 0;
+      const points = entries.map((e, i) => {
+        cumulative += (e.type === "income" ? Number(e.amount) : -Number(e.amount));
+        const x = 40 + i * 40; // spacing
+        const y = 180 - cumulative / 10; // scale down for chart
+        return `${x},${y}`;
+      }).join(" ");
+
+      document.getElementById("ogiveLine").setAttribute("points", points);
+
+      // Summary text
+      let summary = `You earned ${totalIncome}, spent ${totalExpense}, and now have ${balance}. `;
+      if (balance > 0) {
+        summary += "You were close to reaching your goal, but didn’t quite make it. Spend less next time.";
+      } else {
+        summary += "You blew past your income. Definitely need to cut down expenses.";
+      }
+      document.getElementById("summaryText").textContent = summary;
+    </script>
+  </body>
 </html>

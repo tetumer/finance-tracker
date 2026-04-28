@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Add History</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f4f4f9;
+      }
+
+      form {
+        background: white;
+        padding: 20px 40px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        text-align: center;
+        width: 400px;
+      }
+
+      .form-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+      }
+
+      .form-row label {
+        margin-right: 5px;
+        font-weight: bold;
+      }
+
+      .form-row input {
+        flex: 1;
+        padding: 6px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      .radio-group {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+
+      .radio-group label {
+        margin: 0 10px;
+        font-weight: normal;
+      }
+
+      button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+    </style>
+  </head>
+  <body>
+    <form>
+      <div class="radio-group">
+        <input type="radio" id="income" name="type" value="income">
+        <label for="income">Income</label>
+
+        <input type="radio" id="expense" name="type" value="expense">
+        <label for="expense">Expense</label>
+      </div>
+
+      <div class="form-row">
+        <div>
+          <label for="sector">Sector:</label>
+          <input type="text" id="sector" name="sector" placeholder="Enter sector">
+        </div>
+        <div>
+          <label for="amount">Amount:</label>
+          <input type="number" id="amount" name="amount" placeholder="Enter amount">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div>
+          <label for="date">Date:</label>
+          <input type="date" id="date" name="date">
+        </div>
+        <div>
+          <label for="time">Time:</label>
+          <input type="time" id="time" name="time">
+        </div>
+      </div>
+
+      <button type="submit">Submit</button>
+    </form>
+<script>
+  const form = document.querySelector("form");
+  form.addEventListener("submit", function(event) {
+    event.preventDefault(); 
+
+    const type = document.querySelector('input[name="type"]:checked');
+    const sector = document.getElementById("sector").value.trim();
+    const amount = document.getElementById("amount").value.trim();
+    const date = document.getElementById("date").value.trim();
+    const time = document.getElementById("time").value.trim();
+
+    if (!type || sector === "" || amount === "" || date === "" || time === "") {
+      alert("Please fill out all fields before submitting.");
+      return; // stop here, don’t save anything
+    }
+    const entry = { 
+      type: type.value, 
+      sector, 
+      amount, 
+      date, 
+      time 
+    };
+
+    let entries = JSON.parse(localStorage.getItem("entries")) || [];
+    entries.push(entry);
+    localStorage.setItem("entries", JSON.stringify(entries));
+
+    alert("Entry saved!");
+    form.reset();
+    window.location.href = "history.html"; 
+  });
+</script>
+
+
+  </body>
+</html>
