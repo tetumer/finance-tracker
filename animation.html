@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bird Flap Animation</title>
+  <style>
+    /* Fixed container to normalize inconsistent screenshots */
+    .bird-container {
+      width: 400px;      /* set the size you want */
+      height: 300px;     /* adjust to match your desired frame */
+      position: relative;
+      overflow: hidden;  /* crop anything outside */
+      background: #fff;  /* optional background */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Image sizing */
+    #bird {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain; /* keeps proportions inside box */
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="bird-container">
+    <img id="bird" src="one.jpeg" alt="Bird">
+  </div>
+
+  <script>
+    const bird = document.getElementById('bird');
+
+    // Two screenshot images
+    const frames = ["one.jpeg", "two.jpeg"];
+    let current = 0;
+
+    function flap() {
+      current = (current + 1) % frames.length;
+      bird.src = frames[current];
+    }
+
+    // Swap every 400ms
+    setInterval(flap, 400);
+  </script>
+</body>
+</html>
